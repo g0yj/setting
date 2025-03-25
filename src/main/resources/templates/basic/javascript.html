@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <!-- 자바스크립트 인라인 사용 전 -->
+    <script>
+        let username = [[${user.username}]];
+        let age = [[${user.age}]];
+
+        //자바스크립트 내추럴 템플릿
+        const username2 = /*[[${user.username}]]*/ "test username";  // const는 재할당 불가
+
+        //객체
+        let user = [[${user}]];
+    </script>
+
+    <!-- 자바스크립트 인라인 사용 후 -->
+    <script th:inline="javascript">
+        let username = [[${user.username}]];
+        let age = [[${user.age}]];
+
+        //자바스크립트 내추럴 템플릿
+        // /*[[${user.username}]]*/: 이 부분은 주석 처리된 타임리프 표현식
+            // 이 표현식은 타임리프가 서버에서 데이터를 동적으로 삽입할 수 있게 해주며,
+            // 클라이언트가 페이지를 로드할 때 실제로 user.username 값을 해당 위치에 삽입
+        const username2 = /*[[${user.username}]]*/ "test username";  // const는 재할당 불가
+
+        //객체
+        let user = [[${user}]];
+    </script>
+
+    <script th:inline="javascript">
+        let users = [];  // 사용자 배열을 만들고
+        [# th:each="user, stat : ${users}"]
+            // 각 반복마다 user 객체를 배열에 추가
+            users.push([[${user}]]);
+        [/]
+
+        //  **[]**는 타임리프의 반복문 구문을 감싸는 특수 구분자
+            // 이 구문은 서버 측에서 타임리프 템플릿을 처리할 때 자바스크립트 코드로 변환.
+            //타임리프에서 **[]**는 HTML 템플릿을 동적으로 처리하는 타임리프의 처리 구문을 감싸는 역할
+    </script>
+</body>
+</html>
